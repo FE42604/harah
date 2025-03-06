@@ -133,17 +133,20 @@
         </div>
         <?php endif; ?>
 
+
         <?php if ($_SESSION['job_name'] === 'Stock Clerk'): ?>
             <a class="nav-link <?php echo $current_page === 'dashboard.php' ? 'active' : ''; ?>" 
                href="../../roles/stock_clerk/dashboard.php">
                 <i class="bi bi-speedometer2"></i>
                 <span>Dashboard</span>
             </a>
+
             <a class="nav-link <?php echo $current_page === 'inventory.php' ? 'active' : ''; ?>" 
                href="../../roles/stock_clerk/inventory.php">
                 <i class="bi bi-box-seam"></i>
                 <span>Inventory Management</span>
             </a>
+            
             <a class="nav-link <?php echo $current_page === 'raw_ingredients.php' ? 'active' : ''; ?>" 
                href="../../roles/stock_clerk/raw_ingredients.php">
                 <i class="bi bi-egg"></i>
