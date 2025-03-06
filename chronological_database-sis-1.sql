@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 05, 2025 at 03:18 AM
+-- Generation Time: Mar 06, 2025 at 03:22 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -55,7 +55,9 @@ CREATE TABLE `tbl_categories` (
 --
 
 INSERT INTO `tbl_categories` (`category_id`, `category_name`, `category_description`, `created_at`, `updated_at`) VALUES
-(18, 'Products', 'Products', '2025-03-04 17:11:54', '2025-03-04 17:11:54');
+(18, 'Products', 'Products', '2025-03-04 17:11:54', '2025-03-04 17:11:54'),
+(19, 'RI_Meat', 'Meat', '2025-03-05 03:20:44', '2025-03-05 03:20:44'),
+(20, 'RI_Vegetable', 'vegetable', '2025-03-05 03:27:31', '2025-03-05 03:27:31');
 
 -- --------------------------------------------------------
 
@@ -99,7 +101,9 @@ INSERT INTO `tbl_employee` (`employee_id`, `first_name`, `middle_name`, `last_na
 (12, 'cedrick', 'cedrick', 'cedrick', 'cedrick@gmail.com', 'male', '2025-03-04', 'idk', 2),
 (15, 'khendal', 'khendal', 'khendal', 'khendal@gmail.com', 'male', '2025-03-05', '12312', 2),
 (16, 'johnbert', 'johnbert', 'johnbert', 'johnbert@gmail.com', 'male', '2025-03-05', 'aaa', 6),
-(17, 'love', 'love', 'love', 'love@gmail.com', 'female', '2025-03-05', '1352g', 5);
+(17, 'love', 'love', 'love', 'love@gmail.com', 'female', '2025-03-05', '1352g', 5),
+(18, 'kittim', 'kittim', 'kittim', 'kittim@gmail.com', 'male', '2025-03-05', '123', 1),
+(19, 'ignalig', 'ignalig', 'ignalig', 'ignalig@gmail.com', 'male', '2025-03-06', 'hello world', 5);
 
 -- --------------------------------------------------------
 
@@ -204,6 +208,13 @@ CREATE TABLE `tbl_products` (
   `employee_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `tbl_products`
+--
+
+INSERT INTO `tbl_products` (`product_id`, `product_name`, `product_selling_price`, `product_image`, `product_quantity`, `product_restock_qty`, `category_id`, `product_created_at`, `employee_id`) VALUES
+(6, 'Chicken Ala KIng', 79.00, '67c8ff1ab670a.jpg', 50, 6, 18, '2025-03-06 01:49:14', 9);
+
 -- --------------------------------------------------------
 
 --
@@ -258,6 +269,16 @@ CREATE TABLE `tbl_raw_ingredients` (
   `raw_stock_in` int(11) DEFAULT 0,
   `raw_stock_out` int(11) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tbl_raw_ingredients`
+--
+
+INSERT INTO `tbl_raw_ingredients` (`raw_ingredient_id`, `raw_name`, `raw_description`, `raw_unit_of_measure`, `raw_stock_quantity`, `raw_cost_per_unit`, `raw_reorder_level`, `supplier_id`, `category_id`, `raw_created_at`, `employee_id`, `raw_stock_in`, `raw_stock_out`) VALUES
+(3, 'Sausages', 'juicy sausages', 'kg', 0, 20.00, 12, NULL, 19, '2025-03-05 03:33:13', NULL, 0, 0),
+(4, 'Carrots', 'orangeee', 'kg', 20, 3.00, 15, NULL, 20, '2025-03-06 01:31:35', NULL, 0, 0),
+(5, 'Bacon', 'bacon', 'kg', 80, 15.00, 15, NULL, 19, '2025-03-06 01:32:23', NULL, 0, 0),
+(6, 'Cabbage', 'cabbage', 'kg', 10, 14.00, 14, NULL, 20, '2025-03-06 01:33:16', NULL, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -380,7 +401,113 @@ INSERT INTO `tbl_transaction_log` (`transaction_log_id`, `payment_id`, `transact
 (23, NULL, '', NULL, 'User khendal khendal was activated', '2025-03-04 17:54:51'),
 (24, NULL, '', NULL, 'User khendal khendal was deactivated', '2025-03-04 17:54:52'),
 (25, NULL, '', NULL, 'User khendal khendal was activated', '2025-03-04 17:54:53'),
-(26, NULL, '', NULL, 'User khendal khendal was deactivated', '2025-03-04 17:55:41');
+(26, NULL, '', NULL, 'User khendal khendal was deactivated', '2025-03-04 17:55:41'),
+(27, NULL, '', NULL, 'Created new category: RI_Meat', '2025-03-05 03:20:44'),
+(28, NULL, '', NULL, 'Created new raw ingredient category: Vegetable', '2025-03-05 03:27:31'),
+(29, NULL, '', NULL, 'Added new raw ingredient: Sausages', '2025-03-05 03:33:13'),
+(30, NULL, '', NULL, 'Stock out for Sausages: -35', '2025-03-05 03:40:18'),
+(31, NULL, '', NULL, 'Stock in for Sausages: +5', '2025-03-05 03:40:27'),
+(32, NULL, '', NULL, 'Stock out for Sausages: -9', '2025-03-05 03:41:30'),
+(33, NULL, '', NULL, 'Stock in for Sausages: +1', '2025-03-05 03:44:10'),
+(34, NULL, '', NULL, 'Stock in for Sausages: +1', '2025-03-05 03:44:13'),
+(35, NULL, '', NULL, 'Stock out for Sausages: -1', '2025-03-05 03:46:11'),
+(36, NULL, '', NULL, 'Stock in for Sausages: +13', '2025-03-05 03:46:14'),
+(37, NULL, '', NULL, 'Stock out for Sausages: -1', '2025-03-05 03:46:19'),
+(38, NULL, '', NULL, 'Stock out for Sausages: -2', '2025-03-05 03:46:21'),
+(39, NULL, '', NULL, 'Stock out for Sausages: -1', '2025-03-05 03:46:24'),
+(40, NULL, '', NULL, 'Stock out for Sausages: -1', '2025-03-05 03:46:26'),
+(41, NULL, '', NULL, 'Stock out for Sausages: -1', '2025-03-05 03:46:28'),
+(42, NULL, '', NULL, 'Stock out for Sausages: -1', '2025-03-05 03:46:30'),
+(43, NULL, '', NULL, 'Stock in for Sausages: +1', '2025-03-05 03:46:36'),
+(44, NULL, '', NULL, 'Stock out for Sausages: -5', '2025-03-05 03:48:40'),
+(45, NULL, '', NULL, 'Stock out for Sausages: -2', '2025-03-05 03:48:50'),
+(46, NULL, '', NULL, 'Stock out for Sausages: -12', '2025-03-05 03:49:51'),
+(47, NULL, '', NULL, 'Stock in for Sausages: +11', '2025-03-05 03:50:56'),
+(48, NULL, '', NULL, 'Stock in for Sausages: +5', '2025-03-05 03:51:05'),
+(49, NULL, '', NULL, 'Stock in for Sausages: +40', '2025-03-05 03:51:18'),
+(50, NULL, 'adjustment', NULL, 'User francis francis logged in successfully', '2025-03-05 05:52:51'),
+(51, NULL, 'adjustment', NULL, 'User Mar Louis Go logged in successfully', '2025-03-05 05:52:59'),
+(52, NULL, 'purchase', NULL, 'User Mar Louis Go logged in successfully', '2025-03-05 05:54:28'),
+(53, NULL, '', NULL, 'User Mar Louis Go logged in successfully', '2025-03-05 05:54:39'),
+(54, NULL, '', NULL, 'User harah del dios logged in successfully', '2025-03-05 05:55:07'),
+(55, NULL, '', NULL, 'User francis francis logged in successfully', '2025-03-05 05:56:06'),
+(56, NULL, '', NULL, 'Added new product: Milk Tea By: ', '2025-03-05 06:05:24'),
+(57, NULL, '', NULL, 'Added new product: Milk Tea 2 By: ', '2025-03-05 06:06:23'),
+(58, NULL, '', NULL, 'Stock out for Milk Tea: 5 units By: ', '2025-03-05 06:08:54'),
+(59, NULL, '', NULL, 'Stock out for Milk Tea: 5 units By: ', '2025-03-05 06:09:11'),
+(60, NULL, '', NULL, 'Stock out for Milk Tea: 5 units By: ', '2025-03-05 06:09:12'),
+(61, NULL, '', NULL, 'Stock out for Milk Tea: 5 units By: ', '2025-03-05 06:09:13'),
+(62, NULL, '', NULL, 'Stock out for Milk Tea 2: 1 units By: ', '2025-03-05 06:09:51'),
+(63, NULL, 'adjustment', NULL, 'Stock out for Milk Tea 2: 1 units By: ', '2025-03-05 06:11:09'),
+(64, NULL, 'adjustment', NULL, 'Stock out for Milk Tea 2: 1 units By: francis francis', '2025-03-05 06:12:04'),
+(65, NULL, 'adjustment', NULL, 'Stock out for Milk Tea 2: 1 units By: francis francis', '2025-03-05 06:12:05'),
+(66, NULL, 'adjustment', NULL, 'Stock out for Milk Tea 2: 1 units By: francis francis', '2025-03-05 06:12:06'),
+(67, NULL, 'adjustment', NULL, 'Stock out for Milk Tea 2: 1 units By: francis francis', '2025-03-05 06:12:07'),
+(68, NULL, 'adjustment', NULL, 'Stock in for Milk Tea: 1 units By: francis francis', '2025-03-05 06:12:47'),
+(69, NULL, 'adjustment', NULL, 'Stock out for Milk Tea: 1 units By: francis francis', '2025-03-05 06:12:59'),
+(70, NULL, '', NULL, 'User francis francis logged in successfully', '2025-03-05 06:14:13'),
+(71, NULL, '', NULL, 'User Mar Louis Go logged in successfully', '2025-03-05 06:21:45'),
+(72, NULL, 'adjustment', NULL, 'Stock in for Milk Tea: 5 units By: Mar Louis Go', '2025-03-05 06:22:47'),
+(73, NULL, 'adjustment', NULL, 'Stock in for Milk Tea: 5 units By: Mar Louis Go', '2025-03-05 06:22:54'),
+(74, NULL, '', NULL, 'User harah del dios logged in successfully', '2025-03-05 06:24:59'),
+(75, NULL, '', NULL, 'User Mar Louis Go logged in successfully', '2025-03-05 06:25:10'),
+(76, NULL, '', NULL, 'User francis francis logged in successfully', '2025-03-05 06:26:27'),
+(77, NULL, '', NULL, 'User Mar Louis Go logged in successfully', '2025-03-05 06:29:12'),
+(78, NULL, '', NULL, 'Created new employee: kittim kittim as Cashier (by Mar Louis Go)', '2025-03-05 06:29:43'),
+(79, NULL, '', NULL, 'Stock in for Milk Tea: 1 units By: Mar Louis Go', '2025-03-05 06:31:49'),
+(80, NULL, '', NULL, 'User francis francis logged in successfully', '2025-03-05 06:34:54'),
+(81, NULL, '', NULL, 'Stock in for Sausages: +1 By: ', '2025-03-05 06:35:06'),
+(82, NULL, '', NULL, 'User Mar Louis Go logged in successfully', '2025-03-05 06:35:11'),
+(83, NULL, '', NULL, 'Stock in for Milk Tea: 1 units By: Mar Louis Go', '2025-03-05 06:35:40'),
+(84, NULL, '', NULL, 'Stock out for Milk Tea: 1 units By: Mar Louis Go', '2025-03-05 06:40:34'),
+(85, NULL, '', NULL, 'Stock in for Milk Tea: 1 units (by Mar Louis Go)', '2025-03-05 06:44:42'),
+(86, NULL, '', NULL, 'User Mar Louis Go logged in successfully', '2025-03-05 06:44:53'),
+(87, NULL, '', NULL, 'User clemenz clemenz logged in successfully', '2025-03-05 06:45:00'),
+(88, NULL, '', NULL, 'User francis francis logged in successfully', '2025-03-05 06:45:09'),
+(89, NULL, '', NULL, 'Stock out for Milk Tea: 1 units (by francis francis)', '2025-03-05 06:45:15'),
+(90, NULL, '', NULL, 'Stock in for Sausages: +1 By: ', '2025-03-05 06:45:20'),
+(91, NULL, '', NULL, 'Stock out for Sausages: -2 By: ', '2025-03-05 06:45:22'),
+(92, NULL, '', NULL, 'User Mar Louis Go logged in successfully', '2025-03-05 06:45:34'),
+(93, NULL, '', NULL, 'User francis francis logged in successfully', '2025-03-05 06:46:30'),
+(94, NULL, '', NULL, 'Stock out for Sausages: -1 (by francis francis)', '2025-03-05 06:47:43'),
+(95, NULL, '', NULL, 'Stock in for Sausages: +1 (by francis francis)', '2025-03-05 06:47:45'),
+(96, NULL, '', NULL, 'User Mar Louis Go logged in successfully', '2025-03-05 06:47:53'),
+(97, NULL, '', NULL, 'User harah del dios logged in successfully', '2025-03-05 06:48:10'),
+(98, NULL, '', NULL, 'User francis francis logged in successfully', '2025-03-05 07:01:42'),
+(99, NULL, '', NULL, 'Stock out for Sausages: -56 (by francis francis)', '2025-03-05 11:39:17'),
+(100, NULL, '', NULL, 'Stock in for Sausages: +5 (by francis francis)', '2025-03-05 11:40:15'),
+(101, NULL, '', NULL, 'Stock out for Sausages: --1 (by francis francis)', '2025-03-05 11:40:19'),
+(102, NULL, '', NULL, 'Stock out for Sausages: --100 (by francis francis)', '2025-03-05 11:40:31'),
+(103, NULL, '', NULL, 'User Mar Louis Go logged in successfully', '2025-03-05 11:42:21'),
+(104, NULL, '', NULL, 'User francis francis logged in successfully', '2025-03-05 13:35:02'),
+(105, NULL, '', NULL, 'User francis francis logged in successfully', '2025-03-05 13:37:01'),
+(106, NULL, '', NULL, 'User Mar Louis Go logged in successfully', '2025-03-06 01:28:00'),
+(107, NULL, '', NULL, 'User francis francis logged in successfully', '2025-03-06 01:28:42'),
+(108, NULL, '', NULL, 'Stock out for Sausages: -105 (by francis francis)', '2025-03-06 01:29:08'),
+(109, NULL, '', NULL, 'Stock out for Sausages: -1 (by francis francis)', '2025-03-06 01:29:15'),
+(110, NULL, '', NULL, 'Added new raw ingredient: Carrots (by francis francis)', '2025-03-06 01:31:35'),
+(111, NULL, '', NULL, 'Stock out for Carrots: -15 (by francis francis)', '2025-03-06 01:31:43'),
+(112, NULL, '', NULL, 'Added new raw ingredient: Bacon (by francis francis)', '2025-03-06 01:32:23'),
+(113, NULL, '', NULL, 'Stock out for Carrots: -60 (by francis francis)', '2025-03-06 01:32:36'),
+(114, NULL, '', NULL, 'Stock out for Carrots: -5 (by francis francis)', '2025-03-06 01:32:43'),
+(115, NULL, '', NULL, 'Added new raw ingredient: Cabbage (by francis francis)', '2025-03-06 01:33:16'),
+(116, NULL, '', NULL, 'Stock out for Cabbage: -25 (by francis francis)', '2025-03-06 01:33:21'),
+(117, NULL, '', NULL, 'Stock out for Cabbage: -15 (by francis francis)', '2025-03-06 01:33:24'),
+(118, NULL, '', NULL, 'Added new product: Chicken Ala KIng By: ', '2025-03-06 01:49:14'),
+(119, NULL, '', NULL, 'User Mar Louis Go logged in successfully', '2025-03-06 01:55:10'),
+(120, NULL, '', NULL, 'User francis francis logged in successfully', '2025-03-06 01:56:22'),
+(121, NULL, '', NULL, 'User Mar Louis Go logged in successfully', '2025-03-06 01:57:20'),
+(122, NULL, '', NULL, 'User clemenz clemenz logged in successfully', '2025-03-06 02:00:11'),
+(123, NULL, '', NULL, 'User francis francis logged in successfully', '2025-03-06 02:01:03'),
+(124, NULL, '', NULL, 'User Mar Louis Go logged in successfully', '2025-03-06 02:05:19'),
+(125, NULL, '', NULL, 'Created new employee: ignalig ignalig as Maintenance (by Mar Louis Go)', '2025-03-06 02:07:02'),
+(126, NULL, '', NULL, 'User harah del dios logged in successfully', '2025-03-06 02:07:23'),
+(127, NULL, '', NULL, 'User Mar Louis Go logged in successfully', '2025-03-06 02:07:38'),
+(128, NULL, '', NULL, 'User khendal khendal was activated', '2025-03-06 02:08:01'),
+(129, NULL, '', NULL, 'User khendal khendal was deactivated', '2025-03-06 02:08:05'),
+(130, NULL, '', NULL, 'User francis francis logged in successfully', '2025-03-06 02:09:28'),
+(131, NULL, '', NULL, 'User francis francis logged in successfully', '2025-03-06 02:09:28'),
+(132, NULL, '', NULL, 'User francis francis logged in successfully', '2025-03-06 02:10:18');
 
 -- --------------------------------------------------------
 
@@ -403,7 +530,7 @@ CREATE TABLE `tbl_user` (
 INSERT INTO `tbl_user` (`user_id`, `employee_id`, `user_name`, `user_password`, `user_created`) VALUES
 (1, 1, 'margo', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', '2025-03-04 11:29:04'),
 (6, 8, 'clemenz', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', '2025-03-04 12:26:40'),
-(7, 9, 'francis', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', '2025-03-04 12:33:40'),
+(7, 9, 'francis', '7c4a8d09ca3762af61e59520943dc26494f8941b', '2025-03-04 12:33:40'),
 (8, 0, 'harah', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', '2025-03-04 14:29:57'),
 (12, 15, 'khendal', 'INACTIVE_7110eda4d09e062aa5e4a390b0a572ac0d2c0220', '2025-03-04 16:28:27'),
 (14, 16, 'johnbert', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', '2025-03-04 16:37:35');
@@ -577,7 +704,7 @@ ALTER TABLE `tbl_back_order_list`
 -- AUTO_INCREMENT for table `tbl_categories`
 --
 ALTER TABLE `tbl_categories`
-  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `tbl_customer`
@@ -589,7 +716,7 @@ ALTER TABLE `tbl_customer`
 -- AUTO_INCREMENT for table `tbl_employee`
 --
 ALTER TABLE `tbl_employee`
-  MODIFY `employee_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `employee_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `tbl_ingredient_usage`
@@ -625,7 +752,7 @@ ALTER TABLE `tbl_pos_order_items`
 -- AUTO_INCREMENT for table `tbl_products`
 --
 ALTER TABLE `tbl_products`
-  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `tbl_purchase_items`
@@ -643,7 +770,7 @@ ALTER TABLE `tbl_purchase_order_list`
 -- AUTO_INCREMENT for table `tbl_raw_ingredients`
 --
 ALTER TABLE `tbl_raw_ingredients`
-  MODIFY `raw_ingredient_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `raw_ingredient_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `tbl_receipts`
@@ -679,7 +806,7 @@ ALTER TABLE `tbl_suppliers`
 -- AUTO_INCREMENT for table `tbl_transaction_log`
 --
 ALTER TABLE `tbl_transaction_log`
-  MODIFY `transaction_log_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `transaction_log_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=133;
 
 --
 -- AUTO_INCREMENT for table `tbl_user`
