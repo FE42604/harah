@@ -141,10 +141,19 @@
                 <span>Dashboard</span>
             </a>
 
+       
+
+
             <a class="nav-link <?php echo $current_page === 'inventory.php' ? 'active' : ''; ?>" 
                href="../../roles/stock_clerk/inventory.php">
                 <i class="bi bi-box-seam"></i>
                 <span>Inventory Management</span>
+            </a>
+
+            <a class="nav-link <?php echo $current_page === 'items.php' ? 'active' : ''; ?>" 
+            href="../../roles/stock_clerk/items.php">
+                <i class="bi bi-archive"></i>
+                <span>Item List</span>
             </a>
             
             <a class="nav-link <?php echo $current_page === 'raw_ingredients.php' ? 'active' : ''; ?>" 
