@@ -1,0 +1,266 @@
+tbl_back_order_list	CREATE TABLE `tbl_back_order_list` (
+ `back_order_id` int(11) NOT NULL AUTO_INCREMENT,
+ `purchase_item_id` int(11) DEFAULT NULL,
+ `quantity_back_ordered` int(11) DEFAULT 0,
+ `backorder_expected_delivery_date` date DEFAULT NULL,
+ `backorder_created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+ `employee_id` int(11) DEFAULT NULL,
+ PRIMARY KEY (`back_order_id`),
+ KEY `purchase_item_id` (`purchase_item_id`),
+ KEY `employee_id` (`employee_id`),
+ CONSTRAINT `fk_back_order_employee` FOREIGN KEY (`employee_id`) REFERENCES `tbl_employee` (`employee_id`),
+ CONSTRAINT `fk_back_order_purchase_item` FOREIGN KEY (`purchase_item_id`) REFERENCES `tbl_purchase_items` (`purchase_item_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+tbl_categories	CREATE TABLE `tbl_categories` (
+ `category_id` int(11) NOT NULL AUTO_INCREMENT,
+ `category_name` varchar(255) NOT NULL,
+ `category_description` text DEFAULT NULL,
+ `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+ `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+ PRIMARY KEY (`category_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+tbl_customer	CREATE TABLE `tbl_customer` (
+ `cust_id` int(11) NOT NULL AUTO_INCREMENT,
+ `customer_type` enum('individual','business') NOT NULL,
+ `customer_name` varchar(255) NOT NULL,
+ PRIMARY KEY (`cust_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+tbl_employee	CREATE TABLE `tbl_employee` (
+ `employee_id` int(11) NOT NULL AUTO_INCREMENT,
+ `first_name` varchar(255) NOT NULL,
+ `middle_name` varchar(255) DEFAULT NULL,
+ `last_name` varchar(255) NOT NULL,
+ `email` varchar(255) DEFAULT NULL,
+ `gender` enum('male','female','other') DEFAULT NULL,
+ `hired_date` date DEFAULT NULL,
+ `address_info` varchar(255) DEFAULT NULL,
+ `job_id` int(11) DEFAULT NULL,
+ PRIMARY KEY (`employee_id`),
+ KEY `job_id` (`job_id`),
+ CONSTRAINT `fk_employee_job` FOREIGN KEY (`job_id`) REFERENCES `tbl_jobs` (`job_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+tbl_ingredient_usage	CREATE TABLE `tbl_ingredient_usage` (
+ `usage_id` int(11) NOT NULL AUTO_INCREMENT,
+ `product_id` int(11) DEFAULT NULL,
+ `raw_ingredient_id` int(11) DEFAULT NULL,
+ `usage_quantity_used` int(11) DEFAULT NULL,
+ `employee_id` int(11) DEFAULT NULL,
+ PRIMARY KEY (`usage_id`),
+ KEY `product_id` (`product_id`),
+ KEY `raw_ingredient_id` (`raw_ingredient_id`),
+ KEY `employee_id` (`employee_id`),
+ CONSTRAINT `fk_ingredient_usage_employee` FOREIGN KEY (`employee_id`) REFERENCES `tbl_employee` (`employee_id`),
+ CONSTRAINT `fk_ingredient_usage_product` FOREIGN KEY (`product_id`) REFERENCES `tbl_products` (`product_id`),
+ CONSTRAINT `fk_ingredient_usage_raw_ingredient` FOREIGN KEY (`raw_ingredient_id`) REFERENCES `tbl_raw_ingredients` (`raw_ingredient_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+tbl_item_list	CREATE TABLE `tbl_item_list` (
+ `item_id` int(11) NOT NULL AUTO_INCREMENT,
+ `name` varchar(255) NOT NULL,
+ `description` text DEFAULT NULL,
+ `unit_of_measure` varchar(255) NOT NULL,
+ `supplier_id` int(11) DEFAULT NULL,
+ `employee_id` int(11) DEFAULT NULL,
+ `category_id` int(11) DEFAULT NULL,
+ `cost` decimal(10,2) DEFAULT NULL,
+ `status` enum('Active','Inactive') DEFAULT 'Active',
+ `date_created` timestamp NOT NULL DEFAULT current_timestamp(),
+ `date_updated` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+ PRIMARY KEY (`item_id`),
+ KEY `supplier_id` (`supplier_id`),
+ KEY `employee_id` (`employee_id`),
+ KEY `category_id` (`category_id`),
+ CONSTRAINT `fk_item_category` FOREIGN KEY (`category_id`) REFERENCES `tbl_categories` (`category_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+ CONSTRAINT `fk_item_employee` FOREIGN KEY (`employee_id`) REFERENCES `tbl_employee` (`employee_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+ CONSTRAINT `fk_item_supplier` FOREIGN KEY (`supplier_id`) REFERENCES `tbl_suppliers` (`supplier_id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+tbl_jobs	CREATE TABLE `tbl_jobs` (
+ `job_id` int(11) NOT NULL AUTO_INCREMENT,
+ `job_name` varchar(255) NOT NULL,
+ `job_created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+ PRIMARY KEY (`job_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+tbl_payments	CREATE TABLE `tbl_payments` (
+ `payment_id` int(11) NOT NULL AUTO_INCREMENT,
+ `pos_order_id` int(11) DEFAULT NULL,
+ `payment_date` timestamp NOT NULL DEFAULT current_timestamp(),
+ `payment_amount` decimal(10,2) DEFAULT NULL,
+ `payment_method` enum('cash','credit','debit','gcash','online') NOT NULL,
+ `payment_status` enum('pending','completed','failed') NOT NULL,
+ PRIMARY KEY (`payment_id`),
+ KEY `pos_order_id` (`pos_order_id`),
+ CONSTRAINT `fk_payment_pos_order` FOREIGN KEY (`pos_order_id`) REFERENCES `tbl_pos_orders` (`pos_order_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+tbl_pos_orders	CREATE TABLE `tbl_pos_orders` (
+ `pos_order_id` int(11) NOT NULL AUTO_INCREMENT,
+ `employee_id` int(11) DEFAULT NULL,
+ `cust_id` int(11) NOT NULL,
+ `order_date` timestamp NOT NULL DEFAULT current_timestamp(),
+ `order_total_amount` decimal(10,2) DEFAULT NULL,
+ `order_status` enum('pending','completed','cancelled') NOT NULL,
+ `order_type` enum('qr_code','counter') NOT NULL,
+ PRIMARY KEY (`pos_order_id`),
+ KEY `employee_id` (`employee_id`),
+ KEY `cust_id` (`cust_id`),
+ CONSTRAINT `fk_pos_order_customer` FOREIGN KEY (`cust_id`) REFERENCES `tbl_customer` (`cust_id`),
+ CONSTRAINT `fk_pos_order_employee` FOREIGN KEY (`employee_id`) REFERENCES `tbl_employee` (`employee_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+tbl_pos_order_items	CREATE TABLE `tbl_pos_order_items` (
+ `pos_order_item_id` int(11) NOT NULL AUTO_INCREMENT,
+ `pos_order_id` int(11) DEFAULT NULL,
+ `product_id` int(11) DEFAULT NULL,
+ `quantity_sold` int(11) NOT NULL,
+ `item_price` decimal(10,2) DEFAULT NULL,
+ `item_total_amount` decimal(10,2) DEFAULT NULL,
+ PRIMARY KEY (`pos_order_item_id`),
+ KEY `pos_order_id` (`pos_order_id`),
+ KEY `product_id` (`product_id`),
+ CONSTRAINT `fk_pos_order_item_order` FOREIGN KEY (`pos_order_id`) REFERENCES `tbl_pos_orders` (`pos_order_id`),
+ CONSTRAINT `fk_pos_order_item_product` FOREIGN KEY (`product_id`) REFERENCES `tbl_products` (`product_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+tbl_products	CREATE TABLE `tbl_products` (
+ `product_id` int(11) NOT NULL AUTO_INCREMENT,
+ `product_name` varchar(255) NOT NULL,
+ `product_selling_price` decimal(10,2) DEFAULT NULL,
+ `product_image` varchar(255) DEFAULT NULL,
+ `product_quantity` int(11) DEFAULT 0,
+ `product_restock_qty` int(11) DEFAULT 0,
+ `category_id` int(11) DEFAULT NULL,
+ `product_created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+ `employee_id` int(11) DEFAULT NULL,
+ PRIMARY KEY (`product_id`),
+ KEY `category_id` (`category_id`),
+ KEY `employee_id` (`employee_id`),
+ CONSTRAINT `fk_product_category` FOREIGN KEY (`category_id`) REFERENCES `tbl_categories` (`category_id`),
+ CONSTRAINT `fk_product_employee` FOREIGN KEY (`employee_id`) REFERENCES `tbl_employee` (`employee_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+tbl_purchase_items	CREATE TABLE `tbl_purchase_items` (
+ `purchase_item_id` int(11) NOT NULL AUTO_INCREMENT,
+ `purchase_order_id` int(11) DEFAULT NULL,
+ `raw_ingredient_id` int(11) DEFAULT NULL,
+ `quantity_ordered` int(11) NOT NULL DEFAULT 0,
+ `quantity_received` int(11) DEFAULT 0,
+ `back_ordered_quantity` int(11) DEFAULT 0,
+ `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+ `employee_id` int(11) DEFAULT NULL,
+ PRIMARY KEY (`purchase_item_id`),
+ KEY `purchase_order_id` (`purchase_order_id`),
+ KEY `raw_ingredient_id` (`raw_ingredient_id`),
+ KEY `employee_id` (`employee_id`),
+ CONSTRAINT `fk_purchase_item_employee` FOREIGN KEY (`employee_id`) REFERENCES `tbl_employee` (`employee_id`),
+ CONSTRAINT `fk_purchase_item_order` FOREIGN KEY (`purchase_order_id`) REFERENCES `tbl_purchase_order_list` (`purchase_order_id`),
+ CONSTRAINT `fk_purchase_item_raw_ingredient` FOREIGN KEY (`raw_ingredient_id`) REFERENCES `tbl_raw_ingredients` (`raw_ingredient_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+tbl_purchase_order_list	CREATE TABLE `tbl_purchase_order_list` (
+ `purchase_order_id` int(11) NOT NULL AUTO_INCREMENT,
+ `supplier_id` int(11) DEFAULT NULL,
+ `purchase_order_date` timestamp NOT NULL DEFAULT current_timestamp(),
+ `status` enum('ordered','received','partially_received','back_ordered') NOT NULL,
+ `purchase_expected_delivery_date` date DEFAULT NULL,
+ `purchase_created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+ `employee_id` int(11) DEFAULT NULL,
+ PRIMARY KEY (`purchase_order_id`),
+ KEY `supplier_id` (`supplier_id`),
+ KEY `employee_id` (`employee_id`),
+ CONSTRAINT `fk_purchase_order_employee` FOREIGN KEY (`employee_id`) REFERENCES `tbl_employee` (`employee_id`),
+ CONSTRAINT `fk_purchase_order_supplier` FOREIGN KEY (`supplier_id`) REFERENCES `tbl_suppliers` (`supplier_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+tbl_raw_ingredients	CREATE TABLE `tbl_raw_ingredients` (
+ `raw_ingredient_id` int(11) NOT NULL AUTO_INCREMENT,
+ `item_id` int(11) NOT NULL,
+ `raw_description` text DEFAULT NULL,
+ `raw_stock_quantity` int(11) DEFAULT 0,
+ `raw_cost_per_unit` decimal(10,2) DEFAULT NULL,
+ `raw_reorder_level` int(11) DEFAULT NULL,
+ `raw_created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+ `raw_stock_in` int(11) DEFAULT 0,
+ `raw_stock_out` int(11) DEFAULT 0,
+ PRIMARY KEY (`raw_ingredient_id`),
+ KEY `item_id` (`item_id`),
+ CONSTRAINT `fk_raw_item` FOREIGN KEY (`item_id`) REFERENCES `tbl_item_list` (`item_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+tbl_receipts	CREATE TABLE `tbl_receipts` (
+ `receipt_id` int(11) NOT NULL AUTO_INCREMENT,
+ `pos_order_id` int(11) DEFAULT NULL,
+ `employee_id` int(11) DEFAULT NULL,
+ `receipt_date` timestamp NOT NULL DEFAULT current_timestamp(),
+ `receipt_total_amount` decimal(10,2) DEFAULT NULL,
+ `receipt_status` enum('paid','unpaid','refunded') NOT NULL,
+ PRIMARY KEY (`receipt_id`),
+ KEY `pos_order_id` (`pos_order_id`),
+ KEY `employee_id` (`employee_id`),
+ CONSTRAINT `fk_receipt_employee` FOREIGN KEY (`employee_id`) REFERENCES `tbl_employee` (`employee_id`),
+ CONSTRAINT `fk_receipt_pos_order` FOREIGN KEY (`pos_order_id`) REFERENCES `tbl_pos_orders` (`pos_order_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+tbl_receiving_list	CREATE TABLE `tbl_receiving_list` (
+ `receiving_id` int(11) NOT NULL AUTO_INCREMENT,
+ `purchase_item_id` int(11) DEFAULT NULL,
+ `quantity_received` int(11) DEFAULT 0,
+ `receiving_date` timestamp NOT NULL DEFAULT current_timestamp(),
+ `receiving_created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+ `employee_id` int(11) DEFAULT NULL,
+ PRIMARY KEY (`receiving_id`),
+ KEY `purchase_item_id` (`purchase_item_id`),
+ KEY `employee_id` (`employee_id`),
+ CONSTRAINT `fk_receiving_employee` FOREIGN KEY (`employee_id`) REFERENCES `tbl_employee` (`employee_id`),
+ CONSTRAINT `fk_receiving_purchase_item` FOREIGN KEY (`purchase_item_id`) REFERENCES `tbl_purchase_items` (`purchase_item_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+tbl_return_list	CREATE TABLE `tbl_return_list` (
+ `return_id` int(11) NOT NULL AUTO_INCREMENT,
+ `purchase_item_id` int(11) DEFAULT NULL,
+ `quantity_returned` int(11) DEFAULT 0,
+ `return_reason` text DEFAULT NULL,
+ `return_date` timestamp NOT NULL DEFAULT current_timestamp(),
+ `status` tinyint(4) NOT NULL DEFAULT 0 COMMENT '0 = pending, 1 = completed',
+ `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+ `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+ `employee_id` int(11) DEFAULT NULL,
+ PRIMARY KEY (`return_id`),
+ KEY `purchase_item_id` (`purchase_item_id`),
+ KEY `employee_id` (`employee_id`),
+ CONSTRAINT `fk_return_employee` FOREIGN KEY (`employee_id`) REFERENCES `tbl_employee` (`employee_id`) ON DELETE CASCADE,
+ CONSTRAINT `fk_return_purchase_item` FOREIGN KEY (`purchase_item_id`) REFERENCES `tbl_purchase_items` (`purchase_item_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+tbl_sales	CREATE TABLE `tbl_sales` (
+ `sale_id` int(11) NOT NULL AUTO_INCREMENT,
+ `receipt_id` int(11) DEFAULT NULL,
+ `employee_id` int(11) DEFAULT NULL,
+ `sale_date` timestamp NOT NULL DEFAULT current_timestamp(),
+ `total_sale_amount` decimal(10,2) DEFAULT NULL,
+ `sale_status` enum('completed','cancelled','refunded') NOT NULL,
+ PRIMARY KEY (`sale_id`),
+ KEY `receipt_id` (`receipt_id`),
+ KEY `employee_id` (`employee_id`),
+ CONSTRAINT `fk_sale_employee` FOREIGN KEY (`employee_id`) REFERENCES `tbl_employee` (`employee_id`),
+ CONSTRAINT `fk_sale_receipt` FOREIGN KEY (`receipt_id`) REFERENCES `tbl_receipts` (`receipt_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+tbl_suppliers	CREATE TABLE `tbl_suppliers` (
+ `supplier_id` int(11) NOT NULL AUTO_INCREMENT,
+ `supplier_name` varchar(255) NOT NULL,
+ `contact_person` varchar(255) DEFAULT NULL,
+ `address` varchar(255) DEFAULT NULL,
+ `phone` varchar(20) DEFAULT NULL,
+ `email` varchar(255) DEFAULT NULL,
+ `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+ PRIMARY KEY (`supplier_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+tbl_transaction_log	CREATE TABLE `tbl_transaction_log` (
+ `transaction_log_id` int(11) NOT NULL AUTO_INCREMENT,
+ `payment_id` int(11) DEFAULT NULL,
+ `transaction_type` enum('purchase','refund','adjustment') NOT NULL,
+ `transaction_amount` decimal(10,2) DEFAULT NULL,
+ `transaction_description` text DEFAULT NULL,
+ `transaction_date` timestamp NOT NULL DEFAULT current_timestamp(),
+ PRIMARY KEY (`transaction_log_id`),
+ KEY `payment_id` (`payment_id`),
+ CONSTRAINT `fk_transaction_log_payment` FOREIGN KEY (`payment_id`) REFERENCES `tbl_payments` (`payment_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=148 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+tbl_user	CREATE TABLE `tbl_user` (
+ `user_id` int(11) NOT NULL AUTO_INCREMENT,
+ `employee_id` int(11) NOT NULL,
+ `user_name` varchar(255) NOT NULL,
+ `user_password` varchar(255) NOT NULL,
+ `user_created` timestamp NOT NULL DEFAULT current_timestamp(),
+ PRIMARY KEY (`user_id`),
+ UNIQUE KEY `employee_id` (`employee_id`),
+ CONSTRAINT `fk_user_employee` FOREIGN KEY (`employee_id`) REFERENCES `tbl_employee` (`employee_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
