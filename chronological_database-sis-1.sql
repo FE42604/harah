@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.2
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Mar 06, 2025 at 03:22 AM
+-- Host: localhost:3307
+-- Generation Time: Mar 06, 2025 at 04:51 AM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- PHP Version: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -57,7 +57,12 @@ CREATE TABLE `tbl_categories` (
 INSERT INTO `tbl_categories` (`category_id`, `category_name`, `category_description`, `created_at`, `updated_at`) VALUES
 (18, 'Products', 'Products', '2025-03-04 17:11:54', '2025-03-04 17:11:54'),
 (19, 'RI_Meat', 'Meat', '2025-03-05 03:20:44', '2025-03-05 03:20:44'),
-(20, 'RI_Vegetable', 'vegetable', '2025-03-05 03:27:31', '2025-03-05 03:27:31');
+(20, 'RI_Vegetable', 'vegetable', '2025-03-05 03:27:31', '2025-03-05 03:27:31'),
+(21, 'RI_Seasoning', 'for lamas', '2025-03-06 03:00:01', '2025-03-06 03:00:01'),
+(22, 'Milkteas', 'sweets', '2025-03-06 03:00:59', '2025-03-06 03:00:59'),
+(23, 'RI_Chicken', '', '2025-03-06 03:09:57', '2025-03-06 03:09:57'),
+(24, 'RI_Isda', 'food', '2025-03-06 03:12:10', '2025-03-06 03:12:10'),
+(25, 'Seasoning', 'wew', '2025-03-06 03:21:40', '2025-03-06 03:21:40');
 
 -- --------------------------------------------------------
 
@@ -117,6 +122,25 @@ CREATE TABLE `tbl_ingredient_usage` (
   `raw_ingredient_id` int(11) DEFAULT NULL,
   `usage_quantity_used` int(11) DEFAULT NULL,
   `employee_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_item_list`
+--
+
+CREATE TABLE `tbl_item_list` (
+  `item_id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` text DEFAULT NULL,
+  `supplier_id` int(11) DEFAULT NULL,
+  `employee_id` int(11) DEFAULT NULL,
+  `category_id` int(11) DEFAULT NULL,
+  `cost` decimal(10,2) DEFAULT NULL,
+  `status` enum('Active','Inactive') DEFAULT 'Active',
+  `date_created` timestamp NOT NULL DEFAULT current_timestamp(),
+  `date_updated` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -256,29 +280,16 @@ CREATE TABLE `tbl_purchase_order_list` (
 
 CREATE TABLE `tbl_raw_ingredients` (
   `raw_ingredient_id` int(11) NOT NULL,
-  `raw_name` varchar(255) NOT NULL,
+  `item_id` int(11) NOT NULL,
   `raw_description` text DEFAULT NULL,
   `raw_unit_of_measure` varchar(50) DEFAULT NULL,
   `raw_stock_quantity` int(11) DEFAULT 0,
   `raw_cost_per_unit` decimal(10,2) DEFAULT NULL,
   `raw_reorder_level` int(11) DEFAULT NULL,
-  `supplier_id` int(11) DEFAULT NULL,
-  `category_id` int(11) DEFAULT NULL,
   `raw_created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `employee_id` int(11) DEFAULT NULL,
   `raw_stock_in` int(11) DEFAULT 0,
   `raw_stock_out` int(11) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `tbl_raw_ingredients`
---
-
-INSERT INTO `tbl_raw_ingredients` (`raw_ingredient_id`, `raw_name`, `raw_description`, `raw_unit_of_measure`, `raw_stock_quantity`, `raw_cost_per_unit`, `raw_reorder_level`, `supplier_id`, `category_id`, `raw_created_at`, `employee_id`, `raw_stock_in`, `raw_stock_out`) VALUES
-(3, 'Sausages', 'juicy sausages', 'kg', 0, 20.00, 12, NULL, 19, '2025-03-05 03:33:13', NULL, 0, 0),
-(4, 'Carrots', 'orangeee', 'kg', 20, 3.00, 15, NULL, 20, '2025-03-06 01:31:35', NULL, 0, 0),
-(5, 'Bacon', 'bacon', 'kg', 80, 15.00, 15, NULL, 19, '2025-03-06 01:32:23', NULL, 0, 0),
-(6, 'Cabbage', 'cabbage', 'kg', 10, 14.00, 14, NULL, 20, '2025-03-06 01:33:16', NULL, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -507,7 +518,14 @@ INSERT INTO `tbl_transaction_log` (`transaction_log_id`, `payment_id`, `transact
 (129, NULL, '', NULL, 'User khendal khendal was deactivated', '2025-03-06 02:08:05'),
 (130, NULL, '', NULL, 'User francis francis logged in successfully', '2025-03-06 02:09:28'),
 (131, NULL, '', NULL, 'User francis francis logged in successfully', '2025-03-06 02:09:28'),
-(132, NULL, '', NULL, 'User francis francis logged in successfully', '2025-03-06 02:10:18');
+(132, NULL, '', NULL, 'User francis francis logged in successfully', '2025-03-06 02:10:18'),
+(133, NULL, '', NULL, 'User francis francis logged in successfully', '2025-03-06 02:54:52'),
+(134, NULL, '', NULL, 'Created new raw ingredient category: Seasoning By: ', '2025-03-06 03:00:01'),
+(135, NULL, '', NULL, 'Created new category: Milkteas By: ', '2025-03-06 03:00:59'),
+(136, NULL, '', NULL, 'Created new raw ingredient category: Chicken By: ', '2025-03-06 03:09:57'),
+(137, NULL, '', NULL, 'Created new raw ingredient category: Isda By: ', '2025-03-06 03:12:10'),
+(138, NULL, '', NULL, 'Stock in for Bacon: +343 (by francis francis)', '2025-03-06 03:17:12'),
+(139, NULL, '', NULL, 'Created new category: Seasoning By: ', '2025-03-06 03:21:40');
 
 -- --------------------------------------------------------
 
@@ -576,6 +594,15 @@ ALTER TABLE `tbl_ingredient_usage`
   ADD KEY `employee_id` (`employee_id`);
 
 --
+-- Indexes for table `tbl_item_list`
+--
+ALTER TABLE `tbl_item_list`
+  ADD PRIMARY KEY (`item_id`),
+  ADD KEY `supplier_id` (`supplier_id`),
+  ADD KEY `employee_id` (`employee_id`),
+  ADD KEY `category_id` (`category_id`);
+
+--
 -- Indexes for table `tbl_jobs`
 --
 ALTER TABLE `tbl_jobs`
@@ -634,9 +661,7 @@ ALTER TABLE `tbl_purchase_order_list`
 --
 ALTER TABLE `tbl_raw_ingredients`
   ADD PRIMARY KEY (`raw_ingredient_id`),
-  ADD KEY `supplier_id` (`supplier_id`),
-  ADD KEY `category_id` (`category_id`),
-  ADD KEY `employee_id` (`employee_id`);
+  ADD KEY `item_id` (`item_id`);
 
 --
 -- Indexes for table `tbl_receipts`
@@ -704,7 +729,7 @@ ALTER TABLE `tbl_back_order_list`
 -- AUTO_INCREMENT for table `tbl_categories`
 --
 ALTER TABLE `tbl_categories`
-  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `tbl_customer`
@@ -723,6 +748,12 @@ ALTER TABLE `tbl_employee`
 --
 ALTER TABLE `tbl_ingredient_usage`
   MODIFY `usage_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `tbl_item_list`
+--
+ALTER TABLE `tbl_item_list`
+  MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `tbl_jobs`
@@ -806,7 +837,7 @@ ALTER TABLE `tbl_suppliers`
 -- AUTO_INCREMENT for table `tbl_transaction_log`
 --
 ALTER TABLE `tbl_transaction_log`
-  MODIFY `transaction_log_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=133;
+  MODIFY `transaction_log_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=140;
 
 --
 -- AUTO_INCREMENT for table `tbl_user`
@@ -838,6 +869,14 @@ ALTER TABLE `tbl_ingredient_usage`
   ADD CONSTRAINT `fk_ingredient_usage_employee` FOREIGN KEY (`employee_id`) REFERENCES `tbl_employee` (`employee_id`),
   ADD CONSTRAINT `fk_ingredient_usage_product` FOREIGN KEY (`product_id`) REFERENCES `tbl_products` (`product_id`),
   ADD CONSTRAINT `fk_ingredient_usage_raw_ingredient` FOREIGN KEY (`raw_ingredient_id`) REFERENCES `tbl_raw_ingredients` (`raw_ingredient_id`);
+
+--
+-- Constraints for table `tbl_item_list`
+--
+ALTER TABLE `tbl_item_list`
+  ADD CONSTRAINT `fk_item_category` FOREIGN KEY (`category_id`) REFERENCES `tbl_categories` (`category_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_item_employee` FOREIGN KEY (`employee_id`) REFERENCES `tbl_employee` (`employee_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_item_supplier` FOREIGN KEY (`supplier_id`) REFERENCES `tbl_suppliers` (`supplier_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `tbl_payments`
@@ -885,9 +924,7 @@ ALTER TABLE `tbl_purchase_order_list`
 -- Constraints for table `tbl_raw_ingredients`
 --
 ALTER TABLE `tbl_raw_ingredients`
-  ADD CONSTRAINT `fk_raw_ingredient_category` FOREIGN KEY (`category_id`) REFERENCES `tbl_categories` (`category_id`),
-  ADD CONSTRAINT `fk_raw_ingredient_employee` FOREIGN KEY (`employee_id`) REFERENCES `tbl_employee` (`employee_id`),
-  ADD CONSTRAINT `fk_raw_ingredient_supplier` FOREIGN KEY (`supplier_id`) REFERENCES `tbl_suppliers` (`supplier_id`);
+  ADD CONSTRAINT `fk_raw_item` FOREIGN KEY (`item_id`) REFERENCES `tbl_item_list` (`item_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `tbl_receipts`
